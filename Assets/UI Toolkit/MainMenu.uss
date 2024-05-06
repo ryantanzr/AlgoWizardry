@@ -1,0 +1,36 @@
+.header {
+    -unity-font: url("project://database/Assets/TextMesh%20Pro/Fonts/Rosarivo-Regular.ttf?fileID=12800000&guid=6950238cafe6c4ccc9662c59ee0f8c99&type=3#Rosarivo-Regular");
+    font-size: 45px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: initial;
+    -unity-text-align: middle-center;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.button {
+    width: 120px;
+    height: 50px;
+    justify-content: space-around;
+    align-self: center;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-size: 30px;
+    min-width: 250px;
+    min-height: 75px;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    -unity-font: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=6fd0df58fabaf4114a21302ff3fd7a26&type=3#NotInter-Regular");
+}

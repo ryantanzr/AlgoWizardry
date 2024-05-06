@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenu.uss?fileID=7433441132597879392&amp;guid=ea163d022adf848e3a787f31f5faf9f0&amp;type=3#MainMenu" />
+    <ui:VisualElement name="Container" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/bluemoon.png?fileID=2800000&amp;guid=e2d3d6cee47f44072aec2d2caa9bcce5&amp;type=3#bluemoon&quot;); -unity-background-scale-mode: scale-and-crop;">
+        <ui:Label tabindex="-1" text="AlgoWizardry" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Header" class="header" style="margin-top: 5px; margin-right: 5px; margin-bottom: 2px; margin-left: 2px; top: 25px;" />
+        <ui:Label tabindex="-1" text="v0.0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VersionText" style="-unity-text-align: lower-center; -unity-font-definition: initial; -unity-font: url(&quot;project://database/Assets/TextMesh%20Pro/Fonts/Rosarivo-Italic.ttf?fileID=12800000&amp;guid=bdfbea2436b9b4e37a21ee6f2e2b78cf&amp;type=3#Rosarivo-Italic&quot;); color: rgb(255, 255, 255); font-size: 21px; justify-content: flex-start; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgba(255, 255, 255, 0);" />
+        <ui:Button text="Kruskal" parse-escape-sequences="true" display-tooltip-when-elided="true" name="KruskalMinigameButton" class="button" />
+        <ui:Button text="DFS + Djikstra&apos;s" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DFSMinigameButton" class="button" />
+    </ui:VisualElement>
+</ui:UXML>
