@@ -15,17 +15,6 @@ public class Graph : MonoBehaviour
 
     private bool isConnected;
     private bool isAcyclic;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    public void InitializeGraph()
-    {
-        
-    }
 
     public void SetIsConnected(bool connected)
     {
