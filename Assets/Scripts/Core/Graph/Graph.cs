@@ -19,7 +19,12 @@ public class Graph : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-  
+        
+    }
+
+    public void InitializeGraph()
+    {
+        
     }
 
     public void SetIsConnected(bool connected)

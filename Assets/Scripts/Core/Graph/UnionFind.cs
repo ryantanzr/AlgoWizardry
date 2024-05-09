@@ -7,18 +7,28 @@ using UnityEngine;
  * partitioned elements. It checked the connectedness of
  * a graph in near constant time, detects cycles in a graph
  * and is scalable. In this implementation, we use it to
- * determine if a graph is a Minimum Spanning Tree and uses
+ * determine if a graph is a Spanning Tree and uses
  * a size heuristic
  *********************************************************/
 
- public class UnionFind : MonoBehaviour {
+ public class UnionFind {
     private int[] parents;
     private int[] sizes;
+    public bool isSpanningTree { get; private set; }
 
     public UnionFind(List<Vertex> vertices)
     {
-        parents = new int[vertices.Count];
-        sizes = new int[vertices.Count];
+        Initialize(vertices);
+    }
+
+    // Initialize the UnionFind data structure
+    // by creating a set for each vertex
+    // and setting the parent of each vertex to itself
+    public void Initialize(List<Vertex> vertices)
+    {
+        isSpanningTree = false;
+        parents = new int[parents.Length];
+        sizes = new int[sizes.Length];
 
         foreach (Vertex vertex in vertices)
         {
@@ -84,6 +94,15 @@ using UnityEngine;
             parents[sourceRoot] = targetRoot;
             // Increment the rank of target
             sizes[targetRoot] += sizes[sourceRoot];
+        }
+
+        if (sizes[targetRoot] == sizes.Length)
+        {
+            isSpanningTree = true;
+        } 
+        else
+        {
+            isSpanningTree = false;
         }
 
         return Constants.OPERATION_SUCCESS;
