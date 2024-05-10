@@ -11,25 +11,25 @@ using UnityEngine;
  **********************************************************/
 
  
-public class KruskalAlgorithmMinigame : MonoBehaviour {
+public class KruskalAlgorithmMinigame : Minigame {
 
     public Graph graph;
     public int costThreshold;
     private int accumulatedCost;
-    private bool completedGame;
     private UnionFind unionFind;
 
+    
     // Start is called before the first frame update
     void Start()
     {
         unionFind = new UnionFind(graph.vertices);
-        completedGame = false;
+        dialogueContainer = DialogueParser.ParseDialogue("Assets/Scripts/Core/Minigames/Dialogues/KruskalAlgorithm.json");
     }
 
     // Reset the graph to its original state and the 
     // UnionFind data structure. Used when the player
     // is stuck and wants to reset the game
-    public void Reset()
+    public override void Reset()
     {
         foreach (Vertex vertex in graph.vertices)
         {
@@ -101,6 +101,6 @@ public class KruskalAlgorithmMinigame : MonoBehaviour {
     }
 
     // Check if the graph is a minimum spanning tree
-    public bool CheckGraphState() => unionFind.isMST && accumulatedCost <= costThreshold;
+    public bool CheckGraphState() => unionFind.isSpanningTree && accumulatedCost <= costThreshold;
 
 }
