@@ -28,8 +28,8 @@ namespace Algowizardry.Core.GraphTheory {
         public void Initialize(List<Node> vertices)
         {
             isSpanningTree = false;
-            parents = new int[parents.Length];
-            sizes = new int[sizes.Length];
+            parents = new int[vertices.Count];
+            sizes = new int[vertices.Count];
 
             foreach (Node vertex in vertices)
             {
@@ -74,30 +74,30 @@ namespace Algowizardry.Core.GraphTheory {
                 return Constants.OPERATION_FAILURE;
             }
 
-            // If the rank of the source is less than the rank of target
+            // If the size of the source is less than the size of target
             if (sizes[sourceRoot] < sizes[targetRoot])
             {
                 // Set the parent of source to target
                 parents[sourceRoot] = targetRoot;
                 sizes[targetRoot] += sizes[sourceRoot];
             }
-            // If the rank of the source is greater than the rank of target
+            // If the size of the source is greater than the size of target
             else if (sizes[sourceRoot] > sizes[targetRoot])
             {
                 // Set the parent of target to source
                 parents[targetRoot] = sourceRoot;
                 sizes[sourceRoot] += sizes[targetRoot];
             }
-            // If the ranks of the roots are equal
+            // If the size of the roots are equal
             else
             {
                 // Set the parent of source to target
                 parents[sourceRoot] = targetRoot;
-                // Increment the rank of target
+                // Increment the size of target
                 sizes[targetRoot] += sizes[sourceRoot];
             }
 
-            if (sizes[targetRoot] == sizes.Length)
+            if (sizes[sourceRoot] == sizes.Length || sizes[targetRoot] == sizes.Length)
             {
                 isSpanningTree = true;
             } 

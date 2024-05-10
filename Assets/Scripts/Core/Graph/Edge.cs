@@ -21,6 +21,15 @@ namespace Algowizardry.Core.GraphTheory {
         private bool isDirected;
         private int ID;
 
+        public Edge(Node start, Node end, int cost, bool directed)
+        {
+            startVertex = start;
+            endVertex = end;
+            this.cost = cost;
+            isDirected = directed;
+            isActive = false;
+        }
+
         public void ToggleEdge()
         {
             isActive = !isActive;

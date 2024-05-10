@@ -6,9 +6,14 @@ namespace Algowizardry.Core.GraphTheory {
 
     public class Node : MonoBehaviour
     {
-        public List<Edge> edges;
         private bool isVisited;
         public int ID { get; private set; }
+
+        public Node(int id)
+        {
+            ID = id;
+            isVisited = false;
+        }
 
         public void Visit()
         {
