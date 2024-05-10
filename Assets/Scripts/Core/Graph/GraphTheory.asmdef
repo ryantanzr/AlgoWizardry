@@ -1,0 +1,16 @@
+{
+    "name": "GraphTheory",
+    "rootNamespace": "",
+    "references": [
+        "GUID:285404447e64b40c79f5dd27b951a3ce"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

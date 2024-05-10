@@ -5,9 +5,11 @@
  * my scripts to improve readability and maintainability
  *********************************************************/
 
-static class Constants {
+namespace Algowizardry.Utility {
+    public static class Constants {
 
-    public const bool OPERATION_SUCCESS = true;
-    public const bool OPERATION_FAILURE = false;
+        public const bool OPERATION_SUCCESS = true;
+        public const bool OPERATION_FAILURE = false;
 
+    }
 }

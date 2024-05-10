@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Algowizardry.Core.GraphTheory;
+using Algowizardry.Utility;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -10,97 +12,98 @@ using UnityEngine;
  * a minimum spanning tree and to reset the graph
  **********************************************************/
 
- 
-public class KruskalAlgorithmMinigame : Minigame {
+namespace Algowizardry.Core.Minigames{
+    public class KruskalAlgorithmMinigame : Minigame {
 
-    public Graph graph;
-    public int costThreshold;
-    private int accumulatedCost;
-    private UnionFind unionFind;
+        public Graph graph;
+        public int costThreshold;
+        private int accumulatedCost;
+        private UnionFind unionFind;
 
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        unionFind = new UnionFind(graph.vertices);
-        dialogueContainer = DialogueParser.ParseDialogue("Assets/Scripts/Core/Minigames/Dialogues/KruskalAlgorithm.json");
-    }
-
-    // Reset the graph to its original state and the 
-    // UnionFind data structure. Used when the player
-    // is stuck and wants to reset the game
-    public override void Reset()
-    {
-        foreach (Vertex vertex in graph.vertices)
-        {
-            vertex.Unvisit();
-            unionFind.MakeSet(vertex);
-        }
-
-        foreach (Edge edge in graph.edges)
-        {
-            edge.isActive = false;
-        }
-
-        accumulatedCost = 0;
-    }
-
-    // Load the next graph and reset the UnionFind data structure
-    // and the accumulated cost. Used when the player progresses
-    public void LoadNextGraph(Graph newGraph, int newThreshold) {
         
-        // Reset the graph, flags and UnionFind
-        graph = newGraph;
-        costThreshold = newThreshold;
-        accumulatedCost = 0;
-        completedGame = false;
+        // Start is called before the first frame update
+        void Start()
+        {
+            unionFind = new UnionFind(graph.vertices);
+            dialogueContainer = DialogueParser.ParseDialogue("Assets/Scripts/Core/Minigames/Dialogues/KruskalAlgorithm.json");
+        }
 
-        unionFind.Initialize(graph.vertices);
+        // Reset the graph to its original state and the 
+        // UnionFind data structure. Used when the player
+        // is stuck and wants to reset the game
+        public override void Reset()
+        {
+            foreach (Node vertex in graph.vertices)
+            {
+                vertex.Unvisit();
+                unionFind.MakeSet(vertex);
+            }
 
-    }
+            foreach (Edge edge in graph.edges)
+            {
+                edge.isActive = false;
+            }
 
-    public void Union(Edge selectedEdge) {
+            accumulatedCost = 0;
+        }
 
-        // Check if the edge can be added to the minimum spanning tree
-        if (unionFind.Union(selectedEdge.startVertex.ID, selectedEdge.endVertex.ID)) {
+        // Load the next graph and reset the UnionFind data structure
+        // and the accumulated cost. Used when the player progresses
+        public void LoadNextGraph(Graph newGraph, int newThreshold) {
+            
+            // Reset the graph, flags and UnionFind
+            graph = newGraph;
+            costThreshold = newThreshold;
+            accumulatedCost = 0;
+            completedGame = false;
 
-            // Add the cost of the edge to the accumulated cost
-            accumulatedCost += selectedEdge.cost;
+            unionFind.Initialize(graph.vertices);
 
-            // Activate the edge
-            selectedEdge.isActive = true;
+        }
 
-            // Check if the graph is a minimum spanning tree
-            if (CheckGraphState()) {
+        public void Union(Edge selectedEdge) {
 
-                // Set the game as completed
-                completedGame = true;
+            // Check if the edge can be added to the minimum spanning tree
+            if (unionFind.Union(selectedEdge.startVertex.ID, selectedEdge.endVertex.ID)) {
 
+                // Add the cost of the edge to the accumulated cost
+                accumulatedCost += selectedEdge.cost;
+
+                // Activate the edge
+                selectedEdge.isActive = true;
+
+                // Check if the graph is a minimum spanning tree
+                if (CheckGraphState()) {
+
+                    // Set the game as completed
+                    completedGame = true;
+
+                    // Do something
+
+                }
+            }
+            else 
+            {
                 // Do something
-
             }
         }
-        else 
-        {
-            // Do something
-        }
-    }
 
-    public void Split(Edge selectedEdge) {
+        public void Split(Edge selectedEdge) {
 
-        // Check if the edge can be removed from the minimum spanning tree
-        if (unionFind.Split(selectedEdge.startVertex.ID, selectedEdge.endVertex.ID)) {
+            // Check if the edge can be removed from the minimum spanning tree
+            if (unionFind.Split(selectedEdge.startVertex.ID, selectedEdge.endVertex.ID)) {
 
-            // Subtract the cost of the edge from the accumulated cost
-            accumulatedCost -= selectedEdge.cost;
+                // Subtract the cost of the edge from the accumulated cost
+                accumulatedCost -= selectedEdge.cost;
 
-            // Deactivate the edge
-            selectedEdge.isActive = false;
+                // Deactivate the edge
+                selectedEdge.isActive = false;
+            }
+
         }
 
+        // Check if the graph is a minimum spanning tree
+        public bool CheckGraphState() => unionFind.isSpanningTree && accumulatedCost <= costThreshold;
+
     }
-
-    // Check if the graph is a minimum spanning tree
-    public bool CheckGraphState() => unionFind.isSpanningTree && accumulatedCost <= costThreshold;
-
 }

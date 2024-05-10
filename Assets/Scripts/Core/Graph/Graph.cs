@@ -8,22 +8,25 @@ using UnityEngine;
  * which is defined as a collection of connected vertices
  * and edges.
  *********************************************************/
-public class Graph : MonoBehaviour
-{
-    public List<Vertex> vertices;
-    public List<Edge> edges;
 
-    private bool isConnected;
-    private bool isAcyclic;
-
-    public void SetIsConnected(bool connected)
+ namespace Algowizardry.Core.GraphTheory {
+    public class Graph : MonoBehaviour
     {
-        isConnected = connected;
-    }
+        public List<Node> vertices;
+        public List<Edge> edges;
 
-    public void SetIsAcyclic(bool acyclic)
-    {
-        isAcyclic = acyclic;
-    }
+        private bool isConnected;
+        private bool isAcyclic;
 
-}
+        public void SetIsConnected(bool connected)
+        {
+            isConnected = connected;
+        }
+
+        public void SetIsAcyclic(bool acyclic)
+        {
+            isAcyclic = acyclic;
+        }
+
+    }
+ }

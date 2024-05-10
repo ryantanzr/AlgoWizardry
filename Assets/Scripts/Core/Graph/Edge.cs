@@ -7,32 +7,34 @@ using UnityEngine;
  * represents the cost of traversal and 2 vertices
  *********************************************************/
 
-public class Edge : MonoBehaviour
-{
-    public Vertex startVertex;
-    public Vertex endVertex;
-
-    [Range(-10,10)]
-    public int cost;
-
-    public bool isActive;
-
-    private bool isDirected;
-    private int ID;
-
-    public void ToggleEdge()
+namespace Algowizardry.Core.GraphTheory {
+    public class Edge : MonoBehaviour
     {
-        isActive = !isActive;
+        public Node startVertex;
+        public Node endVertex;
 
-        if (isActive)
+        [Range(-10,10)]
+        public int cost;
+
+        public bool isActive;
+
+        private bool isDirected;
+        private int ID;
+
+        public void ToggleEdge()
         {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
+            isActive = !isActive;
+
+            if (isActive)
+            {
+                gameObject.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+
         }
 
     }
-
 }

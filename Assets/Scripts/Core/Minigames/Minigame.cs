@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using Algowizardry.Utility;
 
 /**********************************************************
 * Author: Ryan Tan
@@ -7,10 +9,14 @@ using UnityEngine;
  * and to check if the game has been completed
  **********************************************************/
 
-public abstract class Minigame : MonoBehaviour {
-    
-    protected bool completedGame = false;
-    protected DialogueContainer dialogueContainer;
+namespace Algowizardry.Core.Minigames {
 
-    public abstract void Reset();
+    public abstract class Minigame : MonoBehaviour {
+        
+        protected bool completedGame = false;
+        protected DialogueContainer dialogueContainer;
+
+        public abstract void Reset();
+    }
+
 }
