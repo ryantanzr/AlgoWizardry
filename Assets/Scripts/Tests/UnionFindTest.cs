@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine.TestTools;
 using Algowizardry.Core.GraphTheory;
-using UnityEngine;
 
 public class UnionFindTest
 {
@@ -143,8 +140,6 @@ public class UnionFindTest
 
         // Representative element should not be the same
         Assert.AreNotEqual(LHS, RHS);
-        
-
 
     }
 

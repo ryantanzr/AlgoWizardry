@@ -15,14 +15,9 @@ namespace Algowizardry.Core.GraphTheory {
             isVisited = false;
         }
 
-        public void Visit()
+        public void SetIsVisited(bool visited)
         {
-            isVisited = true;
-        }
-
-        public void Unvisit()
-        {
-            isVisited = false;
+            isVisited = visited;
         }
         
     }

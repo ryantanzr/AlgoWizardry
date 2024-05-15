@@ -35,7 +35,7 @@ namespace Algowizardry.Core.Minigames{
         {
             foreach (Node vertex in graph.vertices)
             {
-                vertex.Unvisit();
+                vertex.SetIsVisited(false);
                 unionFind.MakeSet(vertex);
             }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 /**********************************************************
@@ -9,26 +10,42 @@ using UnityEngine;
  **********************************************************/
 
 namespace Algowizardry.Utility { 
+
+    [System.Serializable]
     public class DialogueLine
     {
-        public string Text { get; set; }
+        public string text;
     }
 
+    [System.Serializable]
     public class Dialogue
     {
-        public string Id { get; set; }
-        public List<DialogueLine> Lines { get; set; }
+        public string id;
+        public List<DialogueLine> lines;
     }
 
+    [System.Serializable]
     public class DialogueContainer
     {
-        public List<Dialogue> Dialogues { get; set; }
+        public List<Dialogue> dialogues;
+    }
+
+    [System.Serializable]
+    public class Wrapper<T>
+    {
+        public T[] Dialogues;
     }
 
     public static class DialogueParser
     {
+        private static T[] FromJson<T>(string json)
+        {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.Dialogues;
+        }
         public static DialogueContainer ParseDialogue(string filePath)
         {
+            
             var jsonString = File.ReadAllText(filePath);
             var dialogues = JsonUtility.FromJson<DialogueContainer>(jsonString);
             return dialogues;
