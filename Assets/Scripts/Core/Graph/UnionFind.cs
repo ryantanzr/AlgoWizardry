@@ -14,7 +14,7 @@ using Algowizardry.Utility;
 namespace Algowizardry.Core.GraphTheory {
     public class UnionFind {
         private int[] parents;
-        private int[] sizes;
+        public int[] sizes {get; private set;}
         public bool isSpanningTree { get; private set; }
 
         public UnionFind(List<Node> vertices)
@@ -119,12 +119,13 @@ namespace Algowizardry.Core.GraphTheory {
             int targetRoot = Find(targetID);
 
             // If vertices are in the same partition, operate
-            if (sourceRoot == targetRoot && sizes[targetID] < sizes[sourceID])
+            if (sourceRoot == targetRoot && sizes[targetID] < sizes[sourceRoot])
             {
+                
                 // Set the parent of source to source
-                parents[targetRoot] = targetRoot;
+                parents[targetID] = targetID;
                 // Decrement the rank of source
-                sizes[sourceRoot] -= sizes[targetRoot];
+                sizes[sourceRoot] -= sizes[targetID];
 
                 return Constants.OPERATION_SUCCESS;
             }

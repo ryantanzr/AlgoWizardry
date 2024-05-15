@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Algowizardry.Core.GraphTheory;
+using System.Security.Cryptography;
+using System.Diagnostics;
 
 public class UnionFindTest
 {
@@ -144,9 +146,62 @@ public class UnionFindTest
     }
 
     // This test determines if the Union Find splits
+    // vertices correctly with a tree of 3 nodes
+    [Test]
+    public void SplitTestSimple() {
+
+        UnionFind uf = null;
+        Graph g = new Graph();
+
+        Setup(ref uf, ref g);
+
+        bool result;
+
+        // Union vertices 0 and 1
+        result = uf.Union(g.edges[0].startVertex.ID, g.edges[0].endVertex.ID);
+        Assert.IsTrue(result);
+        // Union vertices 1 and 2
+        result = uf.Union(g.edges[2].startVertex.ID, g.edges[2].endVertex.ID);
+        Assert.IsTrue(result);
+
+        //Split tree of vertices 0, 1, 2 where 1 is the root
+        result = uf.Split(0, 2);
+        Assert.IsTrue(result);
+
+        Assert.IsTrue(1 == uf.sizes[uf.Find(2)]);
+        Assert.IsTrue(2 == uf.sizes[uf.Find(0)]);
+
+    }
+
+    // This test determines if the Union Find joins
     // vertices correctly
     [Test]
-    public void SplitTest() {
+    public void SplitTestComplex()
+    {
+        UnionFind uf = null;
+        Graph g = new Graph();
+
+        Setup(ref uf, ref g);
+
+        bool result;
+
+        // Union vertices 0 and 1, then 1 and 2, root of tree is 1
+        result = uf.Union(g.edges[0].startVertex.ID, g.edges[0].endVertex.ID);
+        result = uf.Union(g.edges[2].startVertex.ID, g.edges[2].endVertex.ID);
+
+        //Union vertices 3 & 4, then 4 & 5, root of tree is 4
+        result = uf.Union(g.edges[6].startVertex.ID, g.edges[6].endVertex.ID);
+        result = uf.Union(g.edges[7].startVertex.ID, g.edges[7].endVertex.ID);
+
+        //Union the 2 partitions, root of tree is 4
+        result = uf.Union(0, 3);
+
+        //Split tree of 6 nodes back into 2 trees (0, 1, 2) and (3, 4, 5)
+        result = uf.Split(4, 1);
+        Assert.IsTrue(result);
+
+        Assert.IsTrue(3 == uf.sizes[uf.Find(4)]);
+        Assert.IsTrue(3 == uf.sizes[uf.Find(0)]);
 
     }
 }
