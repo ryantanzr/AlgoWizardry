@@ -1,31 +1,61 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Algowizardry.Core.GraphTheory;
-using Algowizardry.Utility;
+using Algowizardry.Minigames;
 
 /**********************************************************
  * Author: Ryan Tan
- * A minigame script that emulates Kruskal's algorithm to
- * find a minimum spanning tree of a graph. It reads a
- * graph and provides callbacks to check if the graph is
- * a minimum spanning tree and to reset the graph
+ * A minigame script that emulates Kruskal's or Prim's 
+ * algorithm to find a minimum spanning tree of a graph. It
+ * reads a graph and provides callbacks to check if the
+ * graph is a minimum spanning tree and to reset the graph
  **********************************************************/
 
 namespace Algowizardry.Core.Minigames{
-    public class KruskalAlgorithmMinigame : Minigame {
+
+    public class MinimumSpanningTreeMinigame : Minigame {
 
         public Graph graph;
         public int costThreshold;
+
         private int accumulatedCost;
         private UnionFind unionFind;
 
-        
-        // Start is called before the first frame update
-        void Start()
+        public MinimumSpanningTreeMinigame(FeaturedTopic topic) : base(topic)
         {
+            LoadNewRound(topic);
+        }
+
+         // Load the next graph and reset the UnionFind data structure
+        // and the accumulated cost. Used when the player progresses
+        public void LoadNextGraph(Graph newGraph, int newThreshold) {
+            
+            // Reset the graph, flags and UnionFind
+            graph = newGraph;
+            costThreshold = newThreshold;
+            accumulatedCost = 0;
+            completedGame = false;
+
+            unionFind.Initialize(graph.vertices);
+
+        }
+
+        // Load a new round of the game with a new topic (Prim or Kruskal)
+        void LoadNewRound(FeaturedTopic topic)
+        {
+            LoadNextGraph(GraphGenerator.GenerateGraph(5, 10), UnityEngine.Random.Range(10, 20));
             unionFind = new UnionFind(graph.vertices);
-            dialogueContainer = DialogueParser.ParseDialogue("Assets/Scripts/Core/Minigames/Dialogues/KruskalAlgorithm.json");
+            
+            try {
+
+                dialogueContainer = DialogueCache.dialogues[topic];
+            
+            } catch (KeyNotFoundException e) {
+            
+                UnityEngine.Debug.Log("Dialogue for " + topic + " not found" + e.ToString());
+            
+            }
+
         }
 
         // Reset the graph to its original state and the 
@@ -47,20 +77,8 @@ namespace Algowizardry.Core.Minigames{
             accumulatedCost = 0;
         }
 
-        // Load the next graph and reset the UnionFind data structure
-        // and the accumulated cost. Used when the player progresses
-        public void LoadNextGraph(Graph newGraph, int newThreshold) {
-            
-            // Reset the graph, flags and UnionFind
-            graph = newGraph;
-            costThreshold = newThreshold;
-            accumulatedCost = 0;
-            completedGame = false;
 
-            unionFind.Initialize(graph.vertices);
-
-        }
-
+        // Activate an edge and check if the graph is a minimum spanning tree
         public void Union(Edge selectedEdge) {
 
             // Check if the edge can be added to the minimum spanning tree
@@ -73,12 +91,12 @@ namespace Algowizardry.Core.Minigames{
                 selectedEdge.isActive = true;
 
                 // Check if the graph is a minimum spanning tree
-                if (CheckGraphState()) {
+                if (CheckGraphState() && topic == FeaturedTopic.Kruskal) {
 
                     // Set the game as completed
                     completedGame = true;
 
-                    // Do something
+                    OnCompletion();
 
                 }
             }
@@ -88,6 +106,7 @@ namespace Algowizardry.Core.Minigames{
             }
         }
 
+        // Deactivate an edge and check if the graph is a minimum spanning tree
         public void Split(Edge selectedEdge) {
 
             // Check if the edge can be removed from the minimum spanning tree
@@ -98,10 +117,24 @@ namespace Algowizardry.Core.Minigames{
 
                 // Deactivate the edge
                 selectedEdge.isActive = false;
+
+                // Check if the graph is a minimum spanning tree
+                if (CheckGraphState() && topic == FeaturedTopic.Prim) {
+
+                    // Set the game as completed
+                    completedGame = true;
+
+                    OnCompletion();
+
+                }
             }
 
         }
 
+        public override bool OnCompletion()
+        {
+            throw new NotImplementedException();
+        }
         // Check if the graph is a minimum spanning tree
         public bool CheckGraphState() => unionFind.isSpanningTree && accumulatedCost <= costThreshold;
 

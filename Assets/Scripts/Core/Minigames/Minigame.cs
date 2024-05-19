@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using Algowizardry.Utility;
 
@@ -11,12 +10,31 @@ using Algowizardry.Utility;
 
 namespace Algowizardry.Core.Minigames {
 
+    public enum FeaturedTopic : byte {
+        Kruskal = 0,
+        Prim = 1,
+        DFS = 2,
+        BFS = 3,
+        Djikstra = 4,
+        AStar = 5
+    }
+
     public abstract class Minigame : MonoBehaviour {
         
         protected bool completedGame = false;
+        
+        [SerializeField]
+        protected FeaturedTopic topic;
         protected DialogueContainer dialogueContainer;
 
+        public Minigame(FeaturedTopic topic) {
+
+            this.topic = topic;
+        }
+
         public abstract void Reset();
+
+        public abstract bool OnCompletion();
     }
 
 }
