@@ -42,8 +42,9 @@ namespace Algowizardry.Core.Minigames{
         // Load a new round of the game with a new topic (Prim or Kruskal)
         private void LoadNewRound(FeaturedTopic topic)
         {
-            
-            LoadNextGraph(GraphGenerator.GenerateGraph(5, 10), UnityEngine.Random.Range(10, 20));
+            int accumulatedCost = 0;
+
+            LoadNextGraph(GraphGenerator.GenerateGraph(5, 10, ref accumulatedCost), UnityEngine.Random.Range(10, 20));
             unionFind = new UnionFind(graph.vertices);
             
             try {
