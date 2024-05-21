@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Algowizardry.Core.GraphTheory;
-using System.Security.Cryptography;
-using System.Diagnostics;
 
 public class UnionFindTest
 {

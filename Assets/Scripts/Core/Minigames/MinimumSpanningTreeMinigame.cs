@@ -17,16 +17,15 @@ namespace Algowizardry.Core.Minigames{
 
         public Graph graph;
         public int costThreshold;
-
-        private int accumulatedCost;
         private UnionFind unionFind;
+        public int accumulatedCost {private set; get;}
 
         public MinimumSpanningTreeMinigame(FeaturedTopic topic) : base(topic)
         {
             LoadNewRound(topic);
         }
 
-         // Load the next graph and reset the UnionFind data structure
+        // Load the next graph and reset the UnionFind data structure
         // and the accumulated cost. Used when the player progresses
         public void LoadNextGraph(Graph newGraph, int newThreshold) {
             
@@ -41,8 +40,9 @@ namespace Algowizardry.Core.Minigames{
         }
 
         // Load a new round of the game with a new topic (Prim or Kruskal)
-        void LoadNewRound(FeaturedTopic topic)
+        private void LoadNewRound(FeaturedTopic topic)
         {
+            
             LoadNextGraph(GraphGenerator.GenerateGraph(5, 10), UnityEngine.Random.Range(10, 20));
             unionFind = new UnionFind(graph.vertices);
             
@@ -130,11 +130,12 @@ namespace Algowizardry.Core.Minigames{
             }
 
         }
-
+        
         public override bool OnCompletion()
         {
             throw new NotImplementedException();
         }
+
         // Check if the graph is a minimum spanning tree
         public bool CheckGraphState() => unionFind.isSpanningTree && accumulatedCost <= costThreshold;
 

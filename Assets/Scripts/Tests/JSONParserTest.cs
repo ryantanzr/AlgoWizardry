@@ -1,9 +1,5 @@
-using System.Collections;
 using NUnit.Framework;
-using UnityEngine.TestTools;
 using Algowizardry.Utility;
-using UnityEngine;
-using System;
 public class JSONParserTest
 {
     // A Test behaves as an ordinary method
@@ -44,6 +40,5 @@ public class JSONParserTest
                 Assert.IsNotNull(dl.text);
             }
         }
-        // Use the Assert class to test conditions
     }
 }
