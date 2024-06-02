@@ -1,5 +1,20 @@
 {
   "dependencies": {
+    "com.annulusgames.ugui-progress-bar": {
+      "version": "https://github.com/AnnulusGames/UnityProgressBar.git?path=Assets/UnityProgressBar",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "3c1940038b542134dd5a873bcaf46a6feeef6d85"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.adaptiveperformance": {
       "version": "4.0.1",
       "depth": 1,
