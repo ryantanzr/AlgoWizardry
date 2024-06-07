@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -50,7 +51,6 @@ namespace Algowizardry.Core.GraphTheory
                     {
                         graph.edges[i].Initialize(start, end, cost, false);
                         accumulatedCost += cost;
-                        mstThreshold = accumulatedCost;
                         i++;
                     }
                     else if (unionFindHelper.isSpanningTree) {
@@ -77,7 +77,35 @@ namespace Algowizardry.Core.GraphTheory
                 }
             }
 
+            mstThreshold = DetermineMSTFromGraph(graph.edges, graph.vertices, ref unionFindHelper);
+
             return graph;
+        }
+
+        // Generate a minimum spanning tree from the graph
+        // using Kruskal's algorithm
+        private static int DetermineMSTFromGraph(List<Edge> edges, List<Node> nodes, ref UnionFind helper) {
+
+            int MSTCost = 0;
+
+            // Sort the edges in ascending order
+            edges.Sort((x, y) => x.cost.CompareTo(y.cost));
+
+            // Initialize the UnionFind data structure
+            helper.Initialize(nodes);
+
+            // Add the edges to the minimum spanning tree
+            foreach (Edge edge in edges)
+            {
+                if (helper.Union(edge.startVertex.ID, edge.endVertex.ID))
+                {
+                    edge.isActive = true;
+                    MSTCost += edge.cost;
+                }
+            }
+
+            return MSTCost;
+
         }
         
     }
