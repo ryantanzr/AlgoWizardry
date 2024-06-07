@@ -1,7 +1,6 @@
-using Algowizardry.Utility;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using Algowizardry.Core;
+using TMPro;
+using System;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -12,7 +11,7 @@ using Algowizardry.Core;
 
 
 namespace Algowizardry.Core.GraphTheory {
-    
+
     [RequireComponent(typeof(LineRenderer))]
     public class Edge : MonoBehaviour
     {
@@ -27,6 +26,11 @@ namespace Algowizardry.Core.GraphTheory {
         private bool isDirected;
         private int ID;
 
+        public delegate void EdgeEventHandler();
+        public event EdgeEventHandler OnEdgeEnabled;
+        public event EdgeEventHandler OnEdgeDisabled;
+
+        public TextMeshPro text;
         public Edge(Node start, Node end, int cost, bool directed)
         {
             startVertex = start;
@@ -36,14 +40,23 @@ namespace Algowizardry.Core.GraphTheory {
             isActive = false;
         }
 
-        public void Start()
+        internal void Initialize(Node start, Node end, int cost, bool v)
         {
+            startVertex = start;
+            endVertex = end;
+            this.cost = cost;
+            isDirected = v;
+
             LineRenderer lineRenderer = GetComponent<LineRenderer>();
             MeshCollider meshCollider = gameObject.GetComponent<MeshCollider>();
 
             Vector3 startVertexPos = startVertex.transform.position;
             Vector3 endVertexPos = endVertex.transform.position;
-           
+            Vector3 midPoint = (endVertexPos + startVertexPos) / 2 + new Vector3(0, 1, 0);
+
+            text.transform.position = midPoint;
+            text.text = cost.ToString();
+            
             lineRenderer.SetPosition(0, startVertexPos);
             lineRenderer.SetPosition(1, endVertexPos);
 
@@ -60,25 +73,17 @@ namespace Algowizardry.Core.GraphTheory {
             lineRenderer.BakeMesh(mesh);
             
             meshCollider.sharedMesh = mesh;
-
         }
 
         public void Update()
         {
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                Debug.Log("Touch detected");
-                Ray rayFromCamera = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                RaycastHit hit;
-                if (Physics.Raycast(rayFromCamera, out hit))
-                {
-                    if (hit.collider.gameObject == gameObject)
-                    {
-                        ToggleEdge();
-                    }
-                }
-            }
+            TapCheck();
+            MouseInputCheck();
+        }
 
+        // Check if the edge has been clicked
+        public void MouseInputCheck() 
+        {
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log("Mouse click detected");
@@ -93,8 +98,26 @@ namespace Algowizardry.Core.GraphTheory {
                     }
                 }
             }
+
         }
 
+        // Check if the edge has been tapped
+        public void TapCheck()
+        {
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                Debug.Log("Touch detected");
+                Ray rayFromCamera = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+                if (Physics.Raycast(rayFromCamera, out hit))
+                {
+                    if (hit.collider.gameObject == gameObject)
+                    {
+                        ToggleEdge();
+                    }
+                }
+            }
+        }
 
         public void ToggleEdge()
         {
@@ -103,14 +126,15 @@ namespace Algowizardry.Core.GraphTheory {
             if (isActive)
             {
                 gameObject.SetActive(true);
+                OnEdgeEnabled?.Invoke();
             }
             else
             {
                 gameObject.SetActive(false);
+                OnEdgeDisabled?.Invoke();
             }
 
         }
 
-        
     }
 }

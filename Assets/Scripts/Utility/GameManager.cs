@@ -9,19 +9,10 @@ namespace Algowizardry.Utility
     public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
-        public Camera mainCamera;
 
         private void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-                mainCamera = Camera.main;
-            }
-            else
-            {
-                Destroy(this);
-            }
+
         }
 
         public void StartMinigame()

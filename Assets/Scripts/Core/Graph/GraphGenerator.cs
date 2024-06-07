@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -14,51 +15,69 @@ namespace Algowizardry.Core.GraphTheory
     {
         private static UnionFind unionFindHelper;
 
-        public static Graph GenerateGraph(int numVertices, int numEdges, ref int accumulatedCost)
+        // Generate a random graph with a specified number 
+        // of vertices and edges The graph is guaranteed
+        // to be connected but may have circuits
+        public static Graph GenerateGraph(ref Graph graph, ref int accumulatedCost, ref int mstThreshold)
         {
-            Graph g = new Graph
-            {
-                vertices = new List<Node>(),
-                edges = new List<Edge>()
-            };
 
+            int numVertices = graph.vertices.Count;
+            int numEdges = graph.edges.Count;
+
+            // Initialize the UnionFind data structure
             if (unionFindHelper == null) {
-                unionFindHelper = new UnionFind(g.vertices);
+                unionFindHelper = new UnionFind(graph.vertices);
             } else {
-                unionFindHelper.Initialize(g.vertices);
-            }
-
-            // Add vertices
-            for (int i = 0; i < numVertices; i++)
-            {
-                Node n = new Node(i);
-                g.vertices.Add(n);
+                unionFindHelper.Initialize(graph.vertices);
             }
 
             // Add random edges with random costs >= 1
             // Ensure that the graph is connected and
             // no circuits are formed
-            for (int i = 0; i < numEdges; i++)
+            for (int i = 0; i < numEdges;)
             {
-                Node start = g.vertices[UnityEngine.Random.Range(0, numVertices)];
-                Node end = g.vertices[UnityEngine.Random.Range(0, numVertices)];
-
-
+                Node start = graph.vertices[UnityEngine.Random.Range(0, numVertices)];
+                Node end = graph.vertices[UnityEngine.Random.Range(0, numVertices)];
                 int cost = UnityEngine.Random.Range(1, 10);
-                accumulatedCost += cost;
 
                 // Ensure that the edge is not a self-loop
                 if (start != end)
                 {
+                    UnityEngine.Debug.Log("Start: " + start.ID + " End: " + end.ID);
+                    // Prioritize a connected graph first
                     // Ensure that the edge does not form a circuit
-                    if (unionFindHelper.Union(start.ID, end.ID))
+                    if (!unionFindHelper.isSpanningTree && unionFindHelper.Union(start.ID, end.ID))
                     {
-                        g.edges.Add(new Edge(start, end, cost, false));
+                        graph.edges[i].Initialize(start, end, cost, false);
+                        accumulatedCost += cost;
+                        mstThreshold = accumulatedCost;
+                        i++;
+                    }
+                    else if (unionFindHelper.isSpanningTree) {
+
+                        //Check if the edge already exists
+                        bool edgeExists = false;
+                        foreach (Edge edge in graph.edges)
+                        {
+                            if ((edge.startVertex == start && edge.endVertex == end) ||
+                                (edge.startVertex == end && edge.endVertex == start))
+                            {
+                                edgeExists = true;
+                                break;
+                            }
+                        }
+
+                        if (!edgeExists)
+                        {
+                            accumulatedCost += cost;
+                            graph.edges[i].Initialize(start, end, cost, false);
+                            i++;
+                        }
                     }
                 }
             }
 
-            return g;
+            return graph;
         }
         
     }

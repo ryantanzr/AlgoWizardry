@@ -7,7 +7,7 @@ namespace Algowizardry.Core.GraphTheory {
     public class Node : MonoBehaviour
     {
         private bool isVisited;
-        public int ID { get; private set; }
+        public int ID;
 
         public Node(int id)
         {

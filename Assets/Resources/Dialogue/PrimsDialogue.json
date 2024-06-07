@@ -1,0 +1,50 @@
+{
+    "dialogues": [
+        {
+            "id": "Introduction-Prims",
+            "lines": [
+                {
+                    "text": "Your current task is to reoptimize the magic lines of the town with the energy threshold."
+                },
+                {
+                    "text": "The map shows you all key points of the town and the cost of connecting any 2 points."
+                },
+                {
+                    "text": "You can only connect 2 points if it doesn't lead to a loop."
+                },
+                {
+                    "text": "You can also remove a connection."
+                },
+                {
+                    "text": "You can connect and disconnect points by tapping on them."
+                },
+                {
+                    "text": "The goal is to minimize the total cost of the magic lines."
+                },
+                {
+                    "text": "Good luck!"
+                }
+            ]
+        },
+        {
+            "id": "Completion-Prims",
+            "lines": [
+                {
+                    "text": "Congratulations! You have successfully reoptimized the magic lines of the town."
+                },
+                {
+                    "text": "What you've just done is called Kruskal's algorithm which finds the minimum spanning tree of a graph."
+                },
+                {
+                    "text": "A minimum spanning tree is a subset of the edges of a connected, edge-weighted graph that connects all the points together, without any cycles and with the minimum cost."
+                },
+                {
+                    "text": "You have minimized the total cost of the magic lines."
+                },
+                {
+                    "text": "You can now move on to the next task."
+                }
+            ]
+        }
+    ]
+}

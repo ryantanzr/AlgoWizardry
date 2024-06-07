@@ -6,7 +6,7 @@ public class JSONParserTest
     [Test]
     public void ParsingTest()
     {
-        DialogueContainer dialogues = DialogueParser.ParseDialogue("Assets/Scripts/Tests/TestDialogue.json");
+        DialogueContainer dialogues = JSONParser.ParseDialogue("Assets/Scripts/Tests/TestDialogue.json");
         Assert.IsNotNull(dialogues);
 
         foreach (Dialogue d in dialogues.dialogues)
@@ -20,13 +20,12 @@ public class JSONParserTest
                 Assert.IsNotNull(dl.text);
             }
         }
-        // Use the Assert class to test conditions
     }
 
     [Test]
     public void ParsingTestTwo()
     {
-        DialogueContainer dialogues = DialogueParser.ParseDialogue("Assets/Resources/Dialogue/KruskalDialogue.json");
+        DialogueContainer dialogues = JSONParser.ParseDialogue("Assets/Resources/Dialogue/KruskalDialogue.json");
         Assert.IsNotNull(dialogues);
 
         foreach (Dialogue d in dialogues.dialogues)

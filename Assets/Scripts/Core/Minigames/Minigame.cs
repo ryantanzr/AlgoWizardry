@@ -19,6 +19,7 @@ namespace Algowizardry.Core.Minigames {
         AStar = 5
     }
 
+    [RequireComponent(typeof(DialogueContainer))]
     public abstract class Minigame : MonoBehaviour {
         
         protected bool completedGame = false;

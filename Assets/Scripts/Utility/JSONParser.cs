@@ -35,8 +35,7 @@ namespace Algowizardry.Utility {
         public T[] Dialogues;
     }
 
-    public static class DialogueParser
-    {
+    public static class JSONParser {
         private static T[] FromJson<T>(string json)
         {
             Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);

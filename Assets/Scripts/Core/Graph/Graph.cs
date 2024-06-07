@@ -12,6 +12,7 @@ using UnityEngine;
  namespace Algowizardry.Core.GraphTheory {
     public class Graph : MonoBehaviour
     {
+
         public List<Node> vertices;
         public List<Edge> edges;
 
