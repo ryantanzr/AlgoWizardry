@@ -11,7 +11,6 @@ using UnityEngine.UIElements;
 public class SceneLoader : MonoBehaviour
 {   
     public UIDocument uiDocument;
-    
     private Button kruskalMinigameButton;
     private Button DFSMinigameButton;
 

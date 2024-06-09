@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Algowizardry.Utility;
 /**********************************************************
  * Author: Ryan Tan
@@ -12,8 +11,8 @@ using Algowizardry.Utility;
  *********************************************************/
 
 namespace Algowizardry.Core.GraphTheory {
-    public class UnionFind {
-        private int[] parents;
+    public class UnionFind : IDeepCopyable<UnionFind>{
+        public int[] parents {get; private set;}
         public int[] sizes {get; private set;}
         public bool isSpanningTree { get; private set; }
 
@@ -27,6 +26,10 @@ namespace Algowizardry.Core.GraphTheory {
         // and setting the parent of each vertex to itself
         public void Initialize(List<Node> vertices)
         {
+            if (vertices == null) 
+            {
+                return;
+            }
             isSpanningTree = false;
             parents = new int[vertices.Count];
             sizes = new int[vertices.Count];
@@ -133,5 +136,14 @@ namespace Algowizardry.Core.GraphTheory {
             return Constants.OPERATION_FAILURE;
         }
 
+        public UnionFind DeepCopy()
+        {
+            return new UnionFind(null)
+            {
+                parents = (int[])parents.Clone(),
+                sizes = (int[])sizes.Clone(),
+                isSpanningTree = isSpanningTree
+            };
+        }
     }
 }

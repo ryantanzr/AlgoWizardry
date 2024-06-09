@@ -14,23 +14,19 @@ namespace Algowizardry.Core.GraphTheory
 {
     public static class GraphGenerator
     {
-        private static UnionFind unionFindHelper;
 
         // Generate a random graph with a specified number 
         // of vertices and edges The graph is guaranteed
         // to be connected but may have circuits
-        public static Graph GenerateGraph(ref Graph graph, ref int accumulatedCost, ref int mstThreshold)
+        public static void GenerateGraph(ref Graph graph, ref int accumulatedCost, ref int mstThreshold, ref UnionFind unionFind)
         {
 
             int numVertices = graph.vertices.Count;
             int numEdges = graph.edges.Count;
 
-            // Initialize the UnionFind data structure
-            if (unionFindHelper == null) {
-                unionFindHelper = new UnionFind(graph.vertices);
-            } else {
-                unionFindHelper.Initialize(graph.vertices);
-            }
+           
+            unionFind.Initialize(graph.vertices);
+            
 
             // Add random edges with random costs >= 1
             // Ensure that the graph is connected and
@@ -47,13 +43,13 @@ namespace Algowizardry.Core.GraphTheory
                     UnityEngine.Debug.Log("Start: " + start.ID + " End: " + end.ID);
                     // Prioritize a connected graph first
                     // Ensure that the edge does not form a circuit
-                    if (!unionFindHelper.isSpanningTree && unionFindHelper.Union(start.ID, end.ID))
+                    if (!unionFind.isSpanningTree && unionFind.Union(start.ID, end.ID))
                     {
-                        graph.edges[i].Initialize(start, end, cost, false);
                         accumulatedCost += cost;
+                        graph.edges[i].Initialize(start, end, cost, false);
                         i++;
                     }
-                    else if (unionFindHelper.isSpanningTree) {
+                    else if (unionFind.isSpanningTree) {
 
                         //Check if the edge already exists
                         bool edgeExists = false;
@@ -76,15 +72,11 @@ namespace Algowizardry.Core.GraphTheory
                     }
                 }
             }
-
-            mstThreshold = DetermineMSTFromGraph(graph.edges, graph.vertices, ref unionFindHelper);
-
-            return graph;
         }
 
         // Generate a minimum spanning tree from the graph
         // using Kruskal's algorithm
-        private static int DetermineMSTFromGraph(List<Edge> edges, List<Node> nodes, ref UnionFind helper) {
+        public static int DetermineMSTFromGraph(List<Node> nodes, List<Edge> edges, ref UnionFind helper) {
 
             int MSTCost = 0;
 

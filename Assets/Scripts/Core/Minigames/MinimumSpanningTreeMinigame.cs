@@ -5,6 +5,7 @@ using Algowizardry.Minigames;
 using UnityProgressBar;
 using TMPro;
 using Algowizardry.Utility;
+using System.Diagnostics;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -22,8 +23,7 @@ namespace Algowizardry.Core.Minigames
         public Graph graph;
         public int costThreshold;
         private UnionFind unionFind;
-        public int accumulatedCost {private set; get;}
-
+        private int accumulatedCost;
 
         public TextMeshProUGUI headerText;
         public TextMeshProUGUI subtitleText;
@@ -46,19 +46,23 @@ namespace Algowizardry.Core.Minigames
         // Load a new round of the game with a new topic (Prim or Kruskal)
         private void LoadNewRound(FeaturedTopic topic)
         {
-            int accumulatedCost = 0;
+            
+            unionFind = new UnionFind(graph.vertices);
 
             //Generate a new graph
-            GraphGenerator.GenerateGraph(ref graph, ref accumulatedCost, ref costThreshold);        
-            
-            // Temporary code, read from the prefab graphs
+            GraphGenerator.GenerateGraph(ref graph, ref accumulatedCost, ref costThreshold, ref unionFind);
+
+            UnionFind temporary = unionFind.DeepCopy();
+
+            //Get the minimum spanning tree details
+            costThreshold = GraphGenerator.DetermineMSTFromGraph(graph.vertices, graph.edges, ref temporary);
+
+            // Set the callbacks for the edges
             foreach (Edge edge in graph.edges)
             {
                 edge.OnEdgeDisabled += () => Split(edge);
                 edge.text.text = edge.cost.ToString();
-            };
-             
-            unionFind = new UnionFind(graph.vertices);
+            }; 
 
             try {
 
@@ -131,50 +135,48 @@ namespace Algowizardry.Core.Minigames
         // Deactivate an edge and check if the graph is a minimum spanning tree
         public void Split(Edge selectedEdge) {
 
-            // Check if the edge can be removed from the minimum spanning tree
-            if (unionFind.Split(selectedEdge.startVertex.ID, selectedEdge.endVertex.ID)) {
+            UnityEngine.Debug.Log("Splitting edge");
+            // Subtract the cost of the edge from the accumulated cost
+            accumulatedCost -= selectedEdge.cost;
 
-                // Subtract the cost of the edge from the accumulated cost
-                accumulatedCost -= selectedEdge.cost;
+            // Deactivate the edge
+            selectedEdge.isActive = false;
 
-                // Deactivate the edge
-                selectedEdge.isActive = false;
+            // Update the UI
+            subtitleText.text = "Current cost: " + accumulatedCost + " / " + costThreshold;
+            progressBar.Value = accumulatedCost;
 
-                // Update the UI
-                subtitleText.text = "Current cost: " + accumulatedCost + " / " + costThreshold;
-                progressBar.Value = accumulatedCost;
+                
+            // Check if the graph is a minimum spanning tree
+            if (CheckGraphState()) {
 
-                // Check if the graph is a minimum spanning tree
-                if (CheckGraphState()) {
+                // Set the game as completed
+                completedGame = true;
 
-                    // Set the game as completed
-                    completedGame = true;
+                OnCompletion();
 
-                    OnCompletion();
-
-                }
             }
-
         }
         
-        public override bool OnCompletion()
-        {
-            throw new NotImplementedException();
+        public override bool OnCompletion() {
+            return true;
         }
 
         // Check if the graph is a minimum spanning tree
-        public bool CheckGraphState() => unionFind.isSpanningTree && accumulatedCost <= costThreshold;
+        public bool CheckGraphState() {
+            
+            UnionFind temporary = new UnionFind(graph.vertices);
+            int costCounter = 0;
 
-        private int DetermineMSTCostThreshold(List<Edge> edges)
-        {
-            int threshold = 0;
-
-            foreach (Edge edge in edges)
-            {
-                threshold += edge.cost;
+            foreach (Edge edge in graph.edges) {
+                if (edge.isActive) {
+                    temporary.Union(edge.startVertex.ID, edge.endVertex.ID);
+                    costCounter += edge.cost;
+                }
             }
 
-            return threshold;
+            return temporary.isSpanningTree && costCounter == costThreshold;  
+
         }
     }
 }

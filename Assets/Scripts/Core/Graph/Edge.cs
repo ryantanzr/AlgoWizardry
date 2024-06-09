@@ -17,22 +17,20 @@ namespace Algowizardry.Core.GraphTheory {
     {
         public Node startVertex;
         public Node endVertex;
+        public TextMeshPro text;
 
         [Range(-10,10)]
         public int cost;
-
         public bool isActive;
 
         private bool isDirected;
         private int ID;
-
+        private LineRenderer lineRenderer;
         public delegate void EdgeEventHandler();
         public event EdgeEventHandler OnEdgeEnabled;
         public event EdgeEventHandler OnEdgeDisabled;
 
-        public TextMeshPro text;
-        public Edge(Node start, Node end, int cost, bool directed)
-        {
+        public Edge(Node start, Node end, int cost, bool directed) {
             startVertex = start;
             endVertex = end;
             this.cost = cost;
@@ -40,14 +38,13 @@ namespace Algowizardry.Core.GraphTheory {
             isActive = false;
         }
 
-        internal void Initialize(Node start, Node end, int cost, bool v)
-        {
+        internal void Initialize(Node start, Node end, int cost, bool v) {
             startVertex = start;
             endVertex = end;
             this.cost = cost;
             isDirected = v;
 
-            LineRenderer lineRenderer = GetComponent<LineRenderer>();
+            lineRenderer = GetComponent<LineRenderer>();
             MeshCollider meshCollider = gameObject.GetComponent<MeshCollider>();
 
             Vector3 startVertexPos = startVertex.transform.position;
@@ -75,15 +72,14 @@ namespace Algowizardry.Core.GraphTheory {
             meshCollider.sharedMesh = mesh;
         }
 
-        public void Update()
-        {
+        public void Update() {
             TapCheck();
             MouseInputCheck();
         }
 
         // Check if the edge has been clicked
-        public void MouseInputCheck() 
-        {
+        public void MouseInputCheck() {
+
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log("Mouse click detected");
@@ -102,8 +98,8 @@ namespace Algowizardry.Core.GraphTheory {
         }
 
         // Check if the edge has been tapped
-        public void TapCheck()
-        {
+        public void TapCheck() {
+            
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 Debug.Log("Touch detected");
@@ -125,12 +121,12 @@ namespace Algowizardry.Core.GraphTheory {
 
             if (isActive)
             {
-                gameObject.SetActive(true);
+                lineRenderer.enabled = true;
                 OnEdgeEnabled?.Invoke();
             }
             else
             {
-                gameObject.SetActive(false);
+                lineRenderer.enabled = false;
                 OnEdgeDisabled?.Invoke();
             }
 
