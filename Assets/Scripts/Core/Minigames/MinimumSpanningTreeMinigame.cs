@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Algowizardry.Core.GraphTheory;
 using Algowizardry.Minigames;
+using Algowizardry.Utility;
 using UnityProgressBar;
 using TMPro;
-using Algowizardry.Utility;
-using System.Diagnostics;
+
 
 /**********************************************************
  * Author: Ryan Tan
@@ -60,7 +59,8 @@ namespace Algowizardry.Core.Minigames
             // Set the callbacks for the edges
             foreach (Edge edge in graph.edges)
             {
-                edge.OnEdgeDisabled += () => Split(edge);
+                edge.OnEdgeDisabled += () => ToggleEdge(edge, false);
+                edge.OnEdgeEnabled += () => ToggleEdge(edge, true);
                 edge.text.text = edge.cost.ToString();
             }; 
 
@@ -89,63 +89,33 @@ namespace Algowizardry.Core.Minigames
         // is stuck and wants to reset the game
         public override void Reset()
         {
-            foreach (Node vertex in graph.vertices)
-            {
-                vertex.SetIsVisited(false);
-                unionFind.MakeSet(vertex);
-            }
+            accumulatedCost = 0;
 
             foreach (Edge edge in graph.edges)
             {
-                edge.isActive = false;
-            }
-
-            accumulatedCost = 0;
-        }
-
-
-        // Activate an edge and check if the graph is a minimum spanning tree
-        public void Union(Edge selectedEdge) {
-
-            // Check if the edge can be added to the minimum spanning tree
-            if (unionFind.Union(selectedEdge.startVertex.ID, selectedEdge.endVertex.ID)) {
-
-                // Add the cost of the edge to the accumulated cost
-                accumulatedCost += selectedEdge.cost;
-
-                // Activate the edge
-                selectedEdge.isActive = true;
-
-                // Check if the graph is a minimum spanning tree
-                if (CheckGraphState() && topic == FeaturedTopic.Kruskal) {
-
-                    // Set the game as completed
-                    completedGame = true;
-
-                    OnCompletion();
-
-                }
-            }
-            else 
-            {
-                // Do something
+                edge.ToggleEdge(true);
+                accumulatedCost += edge.cost;
             }
         }
 
         // Deactivate an edge and check if the graph is a minimum spanning tree
-        public void Split(Edge selectedEdge) {
-
-            UnityEngine.Debug.Log("Splitting edge");
-            // Subtract the cost of the edge from the accumulated cost
-            accumulatedCost -= selectedEdge.cost;
-
-            // Deactivate the edge
-            selectedEdge.isActive = false;
+        public void ToggleEdge(Edge selectedEdge, bool activate) 
+        {
+            if (activate) 
+            {
+                // Increase the cost of the edge from the accumulated cost
+                accumulatedCost += selectedEdge.cost;
+            }
+            else 
+            {
+                // Subtract the cost of the edge from the accumulated cost
+                accumulatedCost -= selectedEdge.cost;
+            }
+           
 
             // Update the UI
             subtitleText.text = "Current cost: " + accumulatedCost + " / " + costThreshold;
             progressBar.Value = accumulatedCost;
-
                 
             // Check if the graph is a minimum spanning tree
             if (CheckGraphState()) {

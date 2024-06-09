@@ -94,7 +94,6 @@ namespace Algowizardry.Core.GraphTheory {
                     }
                 }
             }
-
         }
 
         // Check if the edge has been tapped
@@ -113,6 +112,23 @@ namespace Algowizardry.Core.GraphTheory {
                     }
                 }
             }
+        }
+
+        public void ToggleEdge(bool activate)
+        {
+            isActive = activate;
+
+            if (isActive)
+            {
+                lineRenderer.enabled = true;
+                OnEdgeEnabled?.Invoke();
+            }
+            else
+            {
+                lineRenderer.enabled = false;
+                OnEdgeDisabled?.Invoke();
+            }
+
         }
 
         public void ToggleEdge()
