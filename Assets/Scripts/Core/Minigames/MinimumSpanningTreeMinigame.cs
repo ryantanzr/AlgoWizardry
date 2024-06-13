@@ -23,9 +23,12 @@ namespace Algowizardry.Core.Minigames
         public int costThreshold;
         private UnionFind unionFind;
         private int accumulatedCost;
+        private int currentDialogueIndex;
+        private List<DialogueLine> currentDialogue;
 
         public TextMeshProUGUI headerText;
         public TextMeshProUGUI subtitleText;
+        public TextMeshProUGUI dialoguePanel;
         public ProgressBar progressBar;
 
         public MinimumSpanningTreeMinigame(FeaturedTopic topic) : base(topic)
@@ -82,6 +85,13 @@ namespace Algowizardry.Core.Minigames
             // Set the progress bar
             progressBar.MaxValue = costThreshold;
             progressBar.Value = costThreshold;
+
+            // If it is a new player, display the dialogue
+            {
+                currentDialogue = DialogueCache.dialogues[topic].dialogues[Constants.TUTORIAL_DIALOGUE].lines;
+                dialoguePanel.text = currentDialogue[0].text;
+            
+            }
 
         }
 
@@ -141,6 +151,21 @@ namespace Algowizardry.Core.Minigames
                 OnCompletion();
 
             }
+        }
+
+        public void TraverseDialogue(bool next)
+        {
+            if (next && currentDialogueIndex < currentDialogue.Count - 1)
+            {
+                currentDialogueIndex++;
+            }
+            else if (!next && currentDialogueIndex > 0)
+            {
+                currentDialogueIndex--;
+            }
+
+            dialoguePanel.text = currentDialogue[currentDialogueIndex].text;
+
         }
         
         public override bool OnCompletion() 

@@ -11,5 +11,8 @@ namespace Algowizardry.Utility {
         public const bool OPERATION_SUCCESS = true;
         public const bool OPERATION_FAILURE = false;
 
+        public const int TUTORIAL_DIALOGUE = 0;
+        public const int SUCCESS_DIALOGUE = 1;
+
     }
 }
