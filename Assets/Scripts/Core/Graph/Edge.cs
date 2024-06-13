@@ -18,10 +18,11 @@ namespace Algowizardry.Core.GraphTheory {
         public Node startVertex;
         public Node endVertex;
         public TextMeshPro text;
-
-        [Range(-10,10)]
-        public int cost;
+        public Color errorColor;
+        public Color normalColor;
+        public ParticleSystem particleSystem;
         public bool isActive;
+        [Range(-10,10)] public int cost;
 
         private bool isDirected;
         private int ID;
@@ -51,11 +52,17 @@ namespace Algowizardry.Core.GraphTheory {
             Vector3 endVertexPos = endVertex.transform.position;
             Vector3 midPoint = (endVertexPos + startVertexPos) / 2 + new Vector3(0, 1, 0);
 
+            Vector3 rotation = endVertexPos - startVertexPos;
+
             text.transform.position = midPoint;
             text.text = cost.ToString();
+
+            particleSystem.transform.position = (endVertexPos + startVertexPos) / 2;
+            particleSystem.transform.rotation = Quaternion.LookRotation(rotation, Vector3.up);
             
             lineRenderer.SetPosition(0, startVertexPos);
             lineRenderer.SetPosition(1, endVertexPos);
+            lineRenderer.material.color = normalColor;
 
             //Generate the mesh in world space
             Mesh mesh = new Mesh
@@ -90,7 +97,7 @@ namespace Algowizardry.Core.GraphTheory {
                     Debug.Log("Hit detected" + hit.collider.gameObject.name);
                     if (hit.collider.gameObject == gameObject)
                     {
-                        ToggleEdge();
+                        ToggleEdge(!isActive);
                     }
                 }
             }
@@ -108,7 +115,7 @@ namespace Algowizardry.Core.GraphTheory {
                 {
                     if (hit.collider.gameObject == gameObject)
                     {
-                        ToggleEdge();
+                        ToggleEdge(!isActive);
                     }
                 }
             }
@@ -131,21 +138,8 @@ namespace Algowizardry.Core.GraphTheory {
 
         }
 
-        public void ToggleEdge()
-        {
-            isActive = !isActive;
-
-            if (isActive)
-            {
-                lineRenderer.enabled = true;
-                OnEdgeEnabled?.Invoke();
-            }
-            else
-            {
-                lineRenderer.enabled = false;
-                OnEdgeDisabled?.Invoke();
-            }
-
+        public void SetColor(bool isError) {
+            lineRenderer.material.color = isError ? errorColor : normalColor;
         }
 
     }

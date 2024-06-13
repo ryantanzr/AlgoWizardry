@@ -59,6 +59,7 @@ namespace Algowizardry.Core.Minigames
             // Set the callbacks for the edges
             foreach (Edge edge in graph.edges)
             {
+                edge.ToggleEdge(this.topic == FeaturedTopic.Prim);
                 edge.OnEdgeDisabled += () => ToggleEdge(edge, false);
                 edge.OnEdgeEnabled += () => ToggleEdge(edge, true);
                 edge.text.text = edge.cost.ToString();
@@ -89,12 +90,25 @@ namespace Algowizardry.Core.Minigames
         // is stuck and wants to reset the game
         public override void Reset()
         {
+
             accumulatedCost = 0;
 
-            foreach (Edge edge in graph.edges)
-            {
-                edge.ToggleEdge(true);
-                accumulatedCost += edge.cost;
+            switch(topic) {
+                case FeaturedTopic.Kruskal:
+                    
+                    foreach (Edge edge in graph.edges)
+                    {
+                        edge.ToggleEdge(false);
+                    }
+                    break;
+                case FeaturedTopic.Prim:
+                    
+                    foreach (Edge edge in graph.edges)
+                    {
+                        edge.ToggleEdge(true);
+                        accumulatedCost += edge.cost;
+                    }
+                    break;
             }
         }
 
@@ -118,7 +132,8 @@ namespace Algowizardry.Core.Minigames
             progressBar.Value = accumulatedCost;
                 
             // Check if the graph is a minimum spanning tree
-            if (CheckGraphState()) {
+            if (CheckGraphState()) 
+            {
 
                 // Set the game as completed
                 completedGame = true;
@@ -128,19 +143,23 @@ namespace Algowizardry.Core.Minigames
             }
         }
         
-        public override bool OnCompletion() {
+        public override bool OnCompletion() 
+        {
             return true;
         }
 
         // Check if the graph is a minimum spanning tree
-        public bool CheckGraphState() {
+        public bool CheckGraphState() 
+        {
             
             UnionFind temporary = new UnionFind(graph.vertices);
             int costCounter = 0;
 
-            foreach (Edge edge in graph.edges) {
-                if (edge.isActive) {
-                    temporary.Union(edge.startVertex.ID, edge.endVertex.ID);
+            foreach (Edge edge in graph.edges) 
+            {
+                if (edge.isActive) 
+                {
+                    edge.SetColor(!temporary.Union(edge.startVertex.ID, edge.endVertex.ID));
                     costCounter += edge.cost;
                 }
             }
