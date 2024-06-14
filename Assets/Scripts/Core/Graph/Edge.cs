@@ -57,8 +57,11 @@ namespace Algowizardry.Core.GraphTheory {
             text.transform.position = midPoint;
             text.text = cost.ToString();
 
-            particleSystem.transform.position = (endVertexPos + startVertexPos) / 2;
+            particleSystem.transform.position = startVertexPos;
             particleSystem.transform.rotation = Quaternion.LookRotation(rotation, Vector3.up);
+            
+            var mainModule = particleSystem.main;
+            mainModule.startLifetime = new ParticleSystem.MinMaxCurve(0, Vector3.Distance(startVertexPos, endVertexPos) / mainModule.startSpeed.constant);
             
             lineRenderer.SetPosition(0, startVertexPos);
             lineRenderer.SetPosition(1, endVertexPos);

@@ -53,7 +53,6 @@ namespace Algowizardry.Core.Minigames
 
             //Generate a new graph
             GraphGenerator.GenerateGraph(ref graph, ref accumulatedCost, ref costThreshold, ref unionFind);
-
             UnionFind temporary = unionFind.DeepCopy();
 
             //Get the minimum spanning tree details
