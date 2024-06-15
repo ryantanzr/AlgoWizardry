@@ -65,11 +65,23 @@ namespace Algowizardry.Core.Minigames
                 edge.OnEdgeDisabled += () => ToggleEdge(edge, false);
                 edge.OnEdgeEnabled += () => ToggleEdge(edge, true);
                 edge.text.text = edge.cost.ToString();
-            }; 
+            };
+
+            InitializeUserInterface();
+        }
+
+
+        private void InitializeUserInterface()
+        {
 
             try {
 
                 dialogueContainer = DialogueCache.dialogues[topic];
+                // If it is a new player, display the dialogue
+                {
+                    currentDialogue = dialogueContainer.dialogues[Constants.TUTORIAL_DIALOGUE].lines;
+                    dialoguePanel.text = currentDialogue[0].text;
+                }
             
             } catch (KeyNotFoundException e) {
             
@@ -85,13 +97,7 @@ namespace Algowizardry.Core.Minigames
             progressBar.MaxValue = costThreshold;
             progressBar.Value = costThreshold;
 
-            // If it is a new player, display the dialogue
-            {
-                currentDialogue = DialogueCache.dialogues[topic].dialogues[Constants.TUTORIAL_DIALOGUE].lines;
-                dialoguePanel.text = currentDialogue[0].text;
             
-            }
-
         }
 
         // Reset the graph to its original state and the 

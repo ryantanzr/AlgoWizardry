@@ -40,45 +40,53 @@ namespace Algowizardry.Core.GraphTheory {
         }
 
         internal void Initialize(Node start, Node end, int cost, bool v) {
+            
             startVertex = start;
             endVertex = end;
             this.cost = cost;
             isDirected = v;
 
-            lineRenderer = GetComponent<LineRenderer>();
-            MeshCollider meshCollider = gameObject.GetComponent<MeshCollider>();
-
-            Vector3 startVertexPos = startVertex.transform.position;
-            Vector3 endVertexPos = endVertex.transform.position;
-            Vector3 midPoint = (endVertexPos + startVertexPos) / 2 + new Vector3(0, 1, 0);
-
-            Vector3 rotation = endVertexPos - startVertexPos;
+            Vector3 startPos = startVertex.transform.position;
+            Vector3 endPos = endVertex.transform.position;
+            Vector3 midPoint = (endPos + startPos) / 2 + new Vector3(0, 1, 0);
+            Vector3 rot = endPos - startPos;
 
             text.transform.position = midPoint;
             text.text = cost.ToString();
 
-            particleSystem.transform.position = startVertexPos;
-            particleSystem.transform.rotation = Quaternion.LookRotation(rotation, Vector3.up);
-            
+            InitializeParticleSystem(startPos, endPos, midPoint, rot);
+            InitializeLineRenderer(startPos, endPos);            
+        }
+
+        private void InitializeParticleSystem(Vector3 startPos, Vector3 endPos, Vector3 pos, Vector3 rot)
+        {
+            particleSystem.transform.position = pos;
+            particleSystem.transform.rotation = Quaternion.LookRotation(rot, Vector3.up);
+
             var mainModule = particleSystem.main;
-            mainModule.startLifetime = new ParticleSystem.MinMaxCurve(0, Vector3.Distance(startVertexPos, endVertexPos) / mainModule.startSpeed.constant);
-            
-            lineRenderer.SetPosition(0, startVertexPos);
-            lineRenderer.SetPosition(1, endVertexPos);
+            mainModule.startLifetime = new ParticleSystem.MinMaxCurve(0, Vector3.Distance(startPos, endPos) / mainModule.startSpeed.constant);
+        }
+
+        private void InitializeLineRenderer(Vector3 startPos, Vector3 endPos)
+        {
+            lineRenderer = GetComponent<LineRenderer>();
+
+            lineRenderer.SetPosition(0, startPos);
+            lineRenderer.SetPosition(1, endPos);
             lineRenderer.material.color = normalColor;
+
+            MeshCollider meshCollider = gameObject.GetComponent<MeshCollider>();
 
             //Generate the mesh in world space
             Mesh mesh = new Mesh
             {
                 vertices = new Vector3[]
                 {
-                    startVertexPos,
-                    endVertexPos
+                    startPos,
+                    endPos
                 }
             };
-
             lineRenderer.BakeMesh(mesh);
-            
             meshCollider.sharedMesh = mesh;
         }
 
@@ -92,12 +100,10 @@ namespace Algowizardry.Core.GraphTheory {
 
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Mouse click detected");
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log("Hit detected" + hit.collider.gameObject.name);
                     if (hit.collider.gameObject == gameObject)
                     {
                         ToggleEdge(!isActive);
