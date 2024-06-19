@@ -103,7 +103,7 @@ namespace Algowizardry.Core.Minigames
             };
 
             //Set the callbacks for the PlayerProgressStore
-            OnCompletion += () => PlayerProgressStore.instance.MinigameCompleted(this);
+            OnCompletion += () => PlayerProgressStore.Instance.MinigameCompleted(this);
         }
 
         // Reset the graph to its original state and the 

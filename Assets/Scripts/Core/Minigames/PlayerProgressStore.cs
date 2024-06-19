@@ -16,7 +16,6 @@ namespace Algowizardry.Core.Minigames {
 
     public class PlayerProgressStore : Singleton<PlayerProgressStore>
     {
-        public static PlayerProgressStore instance;
 
         private Dictionary<FeaturedTopic, int> completedMinigames = new Dictionary<FeaturedTopic, int>();
 

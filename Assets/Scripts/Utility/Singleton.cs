@@ -18,7 +18,7 @@ namespace Algowizardry.Utility
             {
                 if (instance == null)
                 {
-                    instance = FindFirstObjectByType<T>();
+                    instance = FindObjectOfType<T>();
                     if (instance == null)
                     {
                         Debug.LogError("No instance of " + typeof(T) + " found in the scene");
