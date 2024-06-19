@@ -1,5 +1,6 @@
 using UnityEngine;
 using Algowizardry.Utility;
+using System;
 
 /**********************************************************
 * Author: Ryan Tan
@@ -20,22 +21,28 @@ namespace Algowizardry.Core.Minigames {
     }
 
     [RequireComponent(typeof(DialogueContainer))]
-    public abstract class Minigame : MonoBehaviour {
-        
-        protected bool completedGame = false;
+    public abstract class Minigame : MonoBehaviour
+    {
         
         [SerializeField]
-        protected FeaturedTopic topic;
+        public FeaturedTopic topic;
         protected DialogueContainer dialogueContainer;
 
-        public Minigame(FeaturedTopic topic) {
+        protected delegate void MinigameEventHandler();
+        protected event MinigameEventHandler OnCompletion;
 
+        public Minigame(FeaturedTopic topic)
+        {
             this.topic = topic;
         }
 
         public abstract void Reset();
-
-        public abstract bool OnCompletion();
+        public void Completion() 
+        {
+            OnCompletion?.Invoke();
+            OnCompletion = null;
+        }
+     
     }
 
 }

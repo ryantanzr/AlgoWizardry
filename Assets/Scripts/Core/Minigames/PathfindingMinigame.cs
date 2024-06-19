@@ -23,11 +23,6 @@ namespace Algowizardry.Core.Minigames {
         {
             throw new System.NotImplementedException();
         }
-
-        public override bool OnCompletion()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
 }

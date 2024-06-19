@@ -60,7 +60,7 @@ namespace Algowizardry.Core.GraphTheory {
 
         private void InitializeParticleSystem(Vector3 startPos, Vector3 endPos, Vector3 pos, Vector3 rot)
         {
-            particleSystem.transform.position = pos;
+            particleSystem.transform.position = startPos;
             particleSystem.transform.rotation = Quaternion.LookRotation(rot, Vector3.up);
 
             var mainModule = particleSystem.main;
@@ -147,8 +147,12 @@ namespace Algowizardry.Core.GraphTheory {
 
         }
 
-        public void SetColor(bool isError) {
+        public void SetColor(bool isError, float lerpWeight)
+        {
             lineRenderer.material.color = isError ? errorColor : normalColor;
+            var mainModule = particleSystem.main;
+            Debug.Log(lerpWeight);
+            mainModule.startColor = Color.Lerp(Color.green, Color.red, lerpWeight);
         }
 
     }

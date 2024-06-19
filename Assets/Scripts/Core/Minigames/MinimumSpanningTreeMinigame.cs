@@ -5,7 +5,6 @@ using Algowizardry.Utility;
 using UnityProgressBar;
 using TMPro;
 
-
 /**********************************************************
  * Author: Ryan Tan
  * A minigame script that emulates Kruskal's or Prim's 
@@ -58,18 +57,10 @@ namespace Algowizardry.Core.Minigames
             //Get the minimum spanning tree details
             costThreshold = GraphGenerator.DetermineMSTFromGraph(graph.vertices, graph.edges, ref temporary);
 
-            // Set the callbacks for the edges
-            foreach (Edge edge in graph.edges)
-            {
-                edge.ToggleEdge(this.topic == FeaturedTopic.Prim);
-                edge.OnEdgeDisabled += () => ToggleEdge(edge, false);
-                edge.OnEdgeEnabled += () => ToggleEdge(edge, true);
-                edge.text.text = edge.cost.ToString();
-            };
-
+           
+            InitializeCallbacks();
             InitializeUserInterface();
         }
-
 
         private void InitializeUserInterface()
         {
@@ -79,7 +70,7 @@ namespace Algowizardry.Core.Minigames
                 dialogueContainer = DialogueCache.dialogues[topic];
                 // If it is a new player, display the dialogue
                 {
-                    currentDialogue = dialogueContainer.dialogues[Constants.TUTORIAL_DIALOGUE].lines;
+                    currentDialogue = dialogueContainer.dialogues[Utility.Constants.TUTORIAL_DIALOGUE].lines;
                     dialoguePanel.text = currentDialogue[0].text;
                 }
             
@@ -94,10 +85,25 @@ namespace Algowizardry.Core.Minigames
             subtitleText.text = "Current cost: " + accumulatedCost + " / " + costThreshold;
 
             // Set the progress bar
-            progressBar.MaxValue = costThreshold;
-            progressBar.Value = costThreshold;
+            progressBar.MaxValue = accumulatedCost;
+            progressBar.Value = accumulatedCost;
 
             
+        }
+
+        private void InitializeCallbacks()
+        {
+            // Set the callbacks for the edges
+            foreach (Edge edge in graph.edges)
+            {
+                edge.ToggleEdge(topic == FeaturedTopic.Prim);
+                edge.OnEdgeDisabled += () => ToggleEdge(edge, false);
+                edge.OnEdgeEnabled += () => ToggleEdge(edge, true);
+                edge.text.text = edge.cost.ToString();
+            };
+
+            //Set the callbacks for the PlayerProgressStore
+            OnCompletion += () => PlayerProgressStore.instance.MinigameCompleted(this);
         }
 
         // Reset the graph to its original state and the 
@@ -147,13 +153,11 @@ namespace Algowizardry.Core.Minigames
             progressBar.Value = accumulatedCost;
                 
             // Check if the graph is a minimum spanning tree
-            if (CheckGraphState()) 
+            if (CheckGraphState(selectedEdge)) 
             {
 
                 // Set the game as completed
-                completedGame = true;
-
-                OnCompletion();
+                Completion();
 
             }
         }
@@ -172,14 +176,9 @@ namespace Algowizardry.Core.Minigames
             dialoguePanel.text = currentDialogue[currentDialogueIndex].text;
 
         }
-        
-        public override bool OnCompletion() 
-        {
-            return true;
-        }
 
         // Check if the graph is a minimum spanning tree
-        public bool CheckGraphState() 
+        public bool CheckGraphState(Edge selectedEdge) 
         {
             
             UnionFind temporary = new UnionFind(graph.vertices);
@@ -189,7 +188,7 @@ namespace Algowizardry.Core.Minigames
             {
                 if (edge.isActive) 
                 {
-                    edge.SetColor(!temporary.Union(edge.startVertex.ID, edge.endVertex.ID));
+                    edge.SetColor(!temporary.Union(edge.startVertex.ID, edge.endVertex.ID) && edge == selectedEdge, (float)accumulatedCost / (float)progressBar.MaxValue);
                     costCounter += edge.cost;
                 }
             }
