@@ -9,7 +9,9 @@ namespace Algowizardry.Minigames {
         public static Dictionary<FeaturedTopic, DialogueContainer> dialogues = new Dictionary<FeaturedTopic, DialogueContainer>();
 
         public static void CacheDialogue(FeaturedTopic topic, DialogueContainer dialogue) {
-            dialogues.Add(topic, dialogue);
+            if(!dialogues.ContainsKey(topic)) {
+                dialogues.Add(topic, dialogue);
+            }
         }
     }
 }

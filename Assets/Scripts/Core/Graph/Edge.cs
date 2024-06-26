@@ -155,5 +155,11 @@ namespace Algowizardry.Core.GraphTheory {
             mainModule.startColor = Color.Lerp(Color.green, Color.red, lerpWeight);
         }
 
+        public void ClearCallbacks()
+        {
+            OnEdgeEnabled = null;
+            OnEdgeDisabled = null;
+        }
+
     }
 }

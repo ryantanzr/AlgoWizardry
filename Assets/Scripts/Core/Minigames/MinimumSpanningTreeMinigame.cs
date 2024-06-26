@@ -4,6 +4,7 @@ using Algowizardry.Minigames;
 using Algowizardry.Utility;
 using UnityProgressBar;
 using TMPro;
+using UnityEngine;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -29,6 +30,7 @@ namespace Algowizardry.Core.Minigames
         public TextMeshProUGUI subtitleText;
         public TextMeshProUGUI dialoguePanel;
         public ProgressBar progressBar;
+        public GameObject completionPanel;
 
         public MinimumSpanningTreeMinigame(FeaturedTopic topic) : base(topic)
         {
@@ -60,6 +62,13 @@ namespace Algowizardry.Core.Minigames
            
             InitializeCallbacks();
             InitializeUserInterface();
+        }
+
+        public void LoadNewRound()
+        {
+            ResetCallbacks();
+            LoadNewRound(Random.Range(0, 2) == 0 ? FeaturedTopic.Kruskal : FeaturedTopic.Prim);
+            Reset();
         }
 
         private void InitializeUserInterface()
@@ -106,6 +115,14 @@ namespace Algowizardry.Core.Minigames
             OnCompletion += () => PlayerProgressStore.Instance.MinigameCompleted(this);
         }
 
+        private void ResetCallbacks()
+        {
+            foreach (Edge edge in graph.edges)
+            {
+                edge.ClearCallbacks();
+            }
+        }
+
         // Reset the graph to its original state and the 
         // UnionFind data structure. Used when the player
         // is stuck and wants to reset the game
@@ -127,7 +144,6 @@ namespace Algowizardry.Core.Minigames
                     foreach (Edge edge in graph.edges)
                     {
                         edge.ToggleEdge(true);
-                        accumulatedCost += edge.cost;
                     }
                     break;
             }
@@ -158,6 +174,7 @@ namespace Algowizardry.Core.Minigames
 
                 // Set the game as completed
                 Completion();
+                completionPanel.SetActive(true);
 
             }
         }

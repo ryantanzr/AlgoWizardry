@@ -21,6 +21,7 @@ namespace Algowizardry.Core.Minigames {
 
         public void MinigameCompleted(Minigame minigame)
         {
+            Debug.Log("Minigame completed: " + minigame.topic);
             if (completedMinigames.ContainsKey(minigame.topic))
             {
                 completedMinigames[minigame.topic]++;
