@@ -37,11 +37,14 @@ namespace Algowizardry.Core.Minigames {
         }
 
         public abstract void Reset();
+        private void LoadNewRound(FeaturedTopic topic);
+        public void LoadNewRound();
         public void Completion() 
         {
             OnCompletion?.Invoke();
             OnCompletion = null;
         }
+
      
     }
 

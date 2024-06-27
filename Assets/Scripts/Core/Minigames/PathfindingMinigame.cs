@@ -19,9 +19,31 @@ namespace Algowizardry.Core.Minigames {
             
         }
 
+        public void Awake()
+        {
+            DialogueCache.CacheDialogue(FeaturedTopic.DFS, JSONParser.ParseDialogue("Assets/Resources/Dialogue/DFS.json"));
+            DialogueCache.CacheDialogue(FeaturedTopic.BFS, JSONParser.ParseDialogue("Assets/Resources/Dialogue/PrimsDialogue.json")); 
+        }
+
+         // Load a new round of the game with a new topic (Prim or Kruskal)
+        private override void LoadNewRound(FeaturedTopic topic)
+        {
+            
+        }
+
+        public override void LoadNewRound()
+        {
+            
+        }
+
         public override void Reset()
         {
             throw new System.NotImplementedException();
+        }
+
+        public bool CheckGameState() 
+        {
+
         }
     }
 

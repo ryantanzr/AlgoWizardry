@@ -47,7 +47,7 @@ namespace Algowizardry.Core.Minigames
         }
 
         // Load a new round of the game with a new topic (Prim or Kruskal)
-        private void LoadNewRound(FeaturedTopic topic)
+        private override void LoadNewRound(FeaturedTopic topic)
         {
             
             unionFind = new UnionFind(graph.vertices);
@@ -64,7 +64,7 @@ namespace Algowizardry.Core.Minigames
             InitializeUserInterface();
         }
 
-        public void LoadNewRound()
+        public override void LoadNewRound()
         {
             ResetCallbacks();
             LoadNewRound(Random.Range(0, 2) == 0 ? FeaturedTopic.Kruskal : FeaturedTopic.Prim);
