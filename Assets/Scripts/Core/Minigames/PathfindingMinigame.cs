@@ -1,5 +1,7 @@
 using UnityEngine;
 using Algowizardry.Core.GraphTheory;
+using Algowizardry.Minigames;
+using Algowizardry.Utility;
 
 /**********************************************************
  * Author: Ryan Tan
@@ -22,11 +24,10 @@ namespace Algowizardry.Core.Minigames {
         public void Awake()
         {
             DialogueCache.CacheDialogue(FeaturedTopic.DFS, JSONParser.ParseDialogue("Assets/Resources/Dialogue/DFS.json"));
-            DialogueCache.CacheDialogue(FeaturedTopic.BFS, JSONParser.ParseDialogue("Assets/Resources/Dialogue/PrimsDialogue.json")); 
         }
 
          // Load a new round of the game with a new topic (Prim or Kruskal)
-        private override void LoadNewRound(FeaturedTopic topic)
+        private void LoadNewRound(FeaturedTopic topic)
         {
             
         }
@@ -43,7 +44,7 @@ namespace Algowizardry.Core.Minigames {
 
         public bool CheckGameState() 
         {
-
+            return false;
         }
     }
 
